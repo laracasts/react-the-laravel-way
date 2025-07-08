@@ -6,6 +6,7 @@ use App\Models\Puppy;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class PuppySeeder extends Seeder
 {
@@ -33,7 +34,7 @@ class PuppySeeder extends Seeder
                 'user_id' => $simon->id,
                 'name' => $puppy['name'],
                 'trait' => $puppy['trait'],
-                'image_url' => '/images/' . $puppy['image'],
+                'image_url' => Storage::url('puppies/' . $puppy['image']),
             ]);
         }
     }

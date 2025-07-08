@@ -1,5 +1,5 @@
-import { LucideIcon } from "lucide-react";
-import type { Config } from "ziggy-js";
+import { LucideIcon } from 'lucide-react';
+import type { Config } from 'ziggy-js';
 
 export interface Auth {
     user: User;
@@ -47,5 +47,6 @@ export interface Puppy {
     name: string;
     trait: string;
     imageUrl: string;
-    likedBy: User["id"][];
+    user: Pick<User, 'id' | 'name'>;
+    // likedBy: User["id"][];
 }

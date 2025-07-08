@@ -16,12 +16,16 @@ export default function App({ puppies }: { puppies: Puppy[] }) {
     return (
         <PageWrapper>
             <Container>
+                {/* <pre>{JSON.stringify(puppies, null, 2)}</pre> */}
                 <Header />
                 <ul className="mt-4 flex flex-wrap gap-4">
                     {puppies.map((puppy) => (
-                        <li className="flex gap-2 bg-white p-6 ring ring-black/10">
-                            <img src={puppy.image_url} alt={puppy.name} className="size-24 object-cover" />
-                            <h2>{puppy.name}</h2>
+                        <li key={puppy.id} className="flex gap-2 bg-white p-6 ring ring-black/10">
+                            <img src={puppy.imageUrl} alt={puppy.name} className="size-24 object-cover" />
+                            <div>
+                                <h2>{puppy.name}</h2>
+                                <p>Owned by {puppy.user.name}</p>
+                            </div>
                         </li>
                     ))}
                 </ul>
