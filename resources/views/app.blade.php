@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html className="scroll-smooth">
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark'=> ($appearance ?? 'system') == 'dark'])>
 
 <head>

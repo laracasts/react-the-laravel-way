@@ -10,6 +10,8 @@ Route::get('/', [PuppyController::class, 'index'])->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('puppies/{puppy}/like', [PuppyController::class, 'like'])
         ->name('puppies.like');
+    Route::post('puppies', [PuppyController::class, 'store'])
+        ->name('puppies.store');
 
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');

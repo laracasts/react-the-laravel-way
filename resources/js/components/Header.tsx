@@ -38,14 +38,6 @@ export function Header() {
             <div className="mt-6">
                 <h1 className="text-lg font-bold">We've got the best puppies!</h1>
                 <p className="text-slate-600">Don't take our word — let the pictures do the talking :)</p>
-                {!auth.user && (
-                    <p className="mt-4 text-slate-600">
-                        <Link href={route('login')} className="underline hover:no-underline">
-                            Sign in
-                        </Link>{' '}
-                        to keep track of your favorite puppies and add new ones!
-                    </p>
-                )}
             </div>
         </header>
     );

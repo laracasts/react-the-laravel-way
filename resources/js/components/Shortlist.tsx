@@ -1,32 +1,44 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { Heart, LoaderCircle, X } from 'lucide-react';
 import { Puppy, SharedData } from '../types';
 
 export function Shortlist({ puppies }: { puppies: Puppy[] }) {
     const { auth } = usePage<SharedData>().props;
+    const likedPuppies: Puppy[] = auth.user ? puppies.filter((pup) => pup.likedBy.includes(auth.user.id)) : [];
+
     return (
         <div>
             <h2 className="flex items-center gap-2 font-medium">
                 <span>Your shortlist</span>
                 <Heart className="fill-pink-500 stroke-pink-500" />
             </h2>
-            <ul className="mt-4 flex flex-wrap gap-4">
-                {puppies
-                    .filter((pup) => pup.likedBy.includes(auth.user?.id))
-                    .map((puppy) => (
-                        <li
-                            key={puppy.id}
-                            className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0"
-                        >
-                            <img height={32} width={32} alt={puppy.name} className="aspect-square w-8 object-cover" src={puppy.imageUrl} />
-                            <p className="px-3 text-sm text-slate-800">{puppy.name}</p>
-                            <DeleteButton id={puppy.id} />
-                        </li>
-                    ))}
-            </ul>
+
+            {!auth.user && <SignInCallout />}
+
+            {auth.user &&
+                (likedPuppies.length > 0 ? (
+                    <ul className="mt-4 flex flex-wrap gap-4">
+                        {likedPuppies.map((puppy) => (
+                            <li
+                                key={puppy.id}
+                                className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0"
+                            >
+                                <img height={32} width={32} alt={puppy.name} className="aspect-square w-8 object-cover" src={puppy.imageUrl} />
+                                <p className="px-3 text-sm text-slate-800">{puppy.name}</p>
+                                <DeleteButton id={puppy.id} />
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p className="mt-2 text-sm text-slate-600">You haven't liked any puppy yet!</p>
+                ))}
         </div>
     );
 }
+
+// ------------------------------
+// ------------------------------
+// ------------------------------
 
 function DeleteButton({ id }: { id: Puppy['id'] }) {
     const { processing, patch } = useForm();
@@ -48,5 +60,20 @@ function DeleteButton({ id }: { id: Puppy['id'] }) {
                 )}
             </button>
         </form>
+    );
+}
+
+// ------------------------------
+// ------------------------------
+// ------------------------------
+
+function SignInCallout() {
+    return (
+        <p className="mt-2 text-sm text-slate-600">
+            <Link href={route('login')} className="underline hover:no-underline">
+                Sign in
+            </Link>{' '}
+            to keep track of your favorite puppies!
+        </p>
     );
 }
