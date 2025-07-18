@@ -1,13 +1,32 @@
-import { type Puppy } from '../types';
+import { Link } from '@inertiajs/react';
+import { PaginatedResponse, type Puppy } from '../types';
 import { LikeToggle } from './LikeToggle';
+import { Pagination } from './pagination';
 
-export function PuppiesList({ puppies }: { puppies: Puppy[] }) {
+export function PuppiesList({ puppies }: { puppies: PaginatedResponse<Puppy> }) {
     return (
-        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {puppies.map((puppy) => (
-                <PuppyCard key={puppy.id} puppy={puppy} />
-            ))}
-        </ul>
+        <>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {puppies.data.map((puppy) => (
+                    <PuppyCard key={puppy.id} puppy={puppy} />
+                ))}
+            </ul>
+
+            <Pagination meta={puppies.meta} links={puppies.links} className="mt-8" />
+
+            <pre>{JSON.stringify(puppies.meta, null, 2)}</pre>
+            <pre>{JSON.stringify(puppies.links, null, 2)}</pre>
+            {puppies.links.prev && (
+                <Link href={puppies.links.prev} className="text-cyan-500 hover:underline">
+                    Previous
+                </Link>
+            )}
+            {puppies.links.next && (
+                <Link href={puppies.links.next} className="text-cyan-500 hover:underline">
+                    Next
+                </Link>
+            )}
+        </>
     );
 }
 
