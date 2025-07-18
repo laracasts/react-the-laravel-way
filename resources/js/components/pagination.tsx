@@ -28,9 +28,9 @@ export function Pagination({ meta, links, className }: PaginationProps) {
                 page {meta.current_page} of {meta.last_page}
             </p>
             <div>
-                {links.last && (
+                {links.next && (
                     <Button asChild variant="ghost">
-                        <Link href={links.last} preserveScroll>
+                        <Link href={links.next} preserveScroll>
                             <span>Next</span>
                             <ChevronRight className="size-4" />
                         </Link>
