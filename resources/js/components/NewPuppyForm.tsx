@@ -1,14 +1,18 @@
-import { useForm } from '@inertiajs/react';
+import { SharedData } from '@/types';
+import { useForm, usePage } from '@inertiajs/react';
 import { useRef } from 'react';
 
 export function NewPuppyForm() {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { auth } = usePage<SharedData>().props;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         trait: '',
-        image_url: null as File | null,
+        image: null as File | null,
     });
+
+    if (!auth.user) return null;
 
     return (
         <div className="mt-12 flex items-center justify-between bg-white p-8 shadow ring ring-black/5">
@@ -57,16 +61,16 @@ export function NewPuppyForm() {
                         {errors.trait && <p className="mt-1 text-sm text-red-500">{errors.trait}</p>}
                     </fieldset>
                     <fieldset className="col-span-2 flex w-full flex-col gap-1">
-                        <label htmlFor="image_url">Profile pic</label>
+                        <label htmlFor="image">Profile pic</label>
                         <input
                             ref={fileInputRef}
                             className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-                            id="image_url"
+                            id="image"
                             type="file"
-                            name="image_url"
-                            onChange={(e) => setData('image_url', e.target.files ? e.target.files[0] : null)}
+                            name="image"
+                            onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                         />
-                        {errors.image_url && <p className="mt-1 text-sm text-red-500">{errors.image_url}</p>}
+                        {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
                     </fieldset>
                 </div>
                 <button
