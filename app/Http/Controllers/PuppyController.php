@@ -44,8 +44,8 @@ class PuppyController extends Controller
 
     public function store(Request $request)
     {
+        sleep(1);
 
-        sleep(1); // Simulate a delay for demonstration purposes
         $request->validate([
             'name' => 'required|string|max:255',
             'trait' => 'required|string|max:255',
