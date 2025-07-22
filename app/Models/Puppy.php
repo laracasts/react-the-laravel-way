@@ -17,4 +17,9 @@ class Puppy extends Model
     {
         return $this->belongsToMany(User::class);
     }
+    protected $fillable = [
+        'name',
+        'trait',
+        'image_url',
+    ];
 }

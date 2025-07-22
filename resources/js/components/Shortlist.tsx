@@ -2,6 +2,7 @@ import { useForm, usePage } from '@inertiajs/react';
 import { Heart, LoaderCircle, X } from 'lucide-react';
 import { Puppy, SharedData } from '../types';
 
+// TODO: Make sure all the liked puppies are showing, not just the ones from the current page.
 export function Shortlist({ puppies }: { puppies: Puppy[] }) {
     const { auth } = usePage<SharedData>().props;
     return (
