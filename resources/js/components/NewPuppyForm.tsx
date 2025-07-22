@@ -9,7 +9,6 @@ export function NewPuppyForm() {
         image: null as File | null,
     });
     const fileInputRef = useRef<HTMLInputElement>(null);
-
     return (
         <>
             <div className="mt-12 flex items-center justify-between bg-white p-8 shadow ring ring-black/5">
@@ -22,6 +21,9 @@ export function NewPuppyForm() {
                                 reset();
                                 if (fileInputRef.current) {
                                     fileInputRef.current.value = '';
+                                }
+                                if (typeof window !== 'undefined') {
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }
                             },
                         });
