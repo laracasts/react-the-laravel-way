@@ -51,6 +51,7 @@ class PuppyController extends Controller
     // ------------------------------
     public function store(Request $request)
     {
+        sleep(2);
         // Validate the data
         $request->validate([
             'name' => 'required|string|max:255',
