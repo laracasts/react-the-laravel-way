@@ -64,7 +64,7 @@ class PuppyController extends Controller
         $image_url = null;
         if ($request->hasFile('image')) {
 
-            $optimized = (new OptimizeWebpImageAction())->handleFromUploadedFile($request->file('image'));
+            $optimized = (new OptimizeWebpImageAction())->handle($request->file('image'));
 
             $path = 'puppies/' . $optimized['fileName'];
 

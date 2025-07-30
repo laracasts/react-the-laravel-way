@@ -8,20 +8,10 @@ use Illuminate\Support\Str;
 
 class OptimizeWebpImageAction
 {
-    public function handleFromUploadedFile(UploadedFile $file): array
-    {
-        return $this->optimize($file->getRealPath());
-    }
-
-    public function handleFromPath(string $path): array
-    {
-        return $this->optimize($path);
-    }
-
-    protected function optimize(string $path): array
+    public function handle(string $input): array
     {
         // Image optimization
-        $image = Image::read($path);
+        $image = Image::read($input);
 
         // Scale down only
         if ($image->width() > 1000) {

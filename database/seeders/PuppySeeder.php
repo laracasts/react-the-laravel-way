@@ -141,16 +141,16 @@ class PuppySeeder extends Seeder
         $optimizer = new OptimizeWebpImageAction();
 
         foreach ($puppies as $puppy) {
-            $storagePath = storage_path('app/public/puppies/' . $puppy['image']);
-            $optimized = $optimizer->handleFromPath($storagePath);
 
+            // Optimize the image
+            $input = storage_path('app/public/puppies/' . $puppy['image']);
+            $optimized = $optimizer->handle($input);
+
+            // Grab the path of the image
             $path = 'puppies/' . $optimized['fileName'];
-            $stored = Storage::disk('public')->put($path, $optimized['webpString']);
 
-            if (!$stored) {
-                dump('Failed to store image: ' . $puppy['image']);
-                continue;
-            }
+            // Store that image
+            Storage::disk('public')->put($path, $optimized['webpString']);
 
             Puppy::create([
                 'user_id' => $simon->id,
