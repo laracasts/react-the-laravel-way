@@ -7,6 +7,7 @@ use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Actions\OptimizeWebpImageAction;
 
 class PuppyController extends Controller
 {
@@ -62,15 +63,21 @@ class PuppyController extends Controller
         // Store the uploaded image
         $image_url = null;
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('puppies', 'public');
-            if (!$path) {
+
+            $optimized = (new OptimizeWebpImageAction())->handleFromUploadedFile($request->file('image'));
+
+            $path = 'puppies/' . $optimized['fileName'];
+
+            $stored = Storage::disk('public')->put($path, $optimized['webpString']);
+
+            if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image.']);
             }
             $image_url = Storage::url($path);
         }
 
         // Create a new Puppy instance attached to the authenticated user
-        $puppy = $request->user()->puppies()->create([
+        $request->user()->puppies()->create([
             'name' => $request->name,
             'trait' => $request->trait,
             'image_url' => $image_url,
