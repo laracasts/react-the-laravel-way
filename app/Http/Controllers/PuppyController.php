@@ -7,7 +7,8 @@ use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use App\Actions\OptimizeWebpImageAction;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Str;
 
 class PuppyController extends Controller
 {
@@ -31,6 +32,9 @@ class PuppyController extends Controller
                     ->paginate(9)
                     ->withQueryString()
             ),
+            'likedPuppies' => $request->user()
+                ? PuppyResource::collection($request->user()->likedPuppies)
+                : [],
             'filters' => [
                 'search' => $search,
             ],
@@ -42,7 +46,7 @@ class PuppyController extends Controller
     // ------------------------------
     public function like(Request $request, Puppy $puppy)
     {
-        sleep(1);
+        usleep(200000);
         $puppy->likedBy()->toggle($request->user()->id);
         return back();
     }
@@ -52,7 +56,7 @@ class PuppyController extends Controller
     // ------------------------------
     public function store(Request $request)
     {
-        sleep(2);
+        usleep(200000);
         // Validate the data
         $request->validate([
             'name' => 'required|string|max:255',
@@ -64,11 +68,20 @@ class PuppyController extends Controller
         $image_url = null;
         if ($request->hasFile('image')) {
 
-            $optimized = (new OptimizeWebpImageAction())->handle($request->file('image'));
+            // Image optimization
+            $image = Image::read($request->file('image'));
 
-            $path = 'puppies/' . $optimized['fileName'];
+            // Scale down only
+            if ($image->width() > 1000) {
+                $image->scale(width: 1000);
+            }
 
-            $stored = Storage::disk('public')->put($path, $optimized['webpString']);
+            $webpEncoded = $image->toWebp(quality: 95)->toString();
+
+            $fileName = Str::random() . '.webp';
+            $path = 'puppies/' . $fileName;
+
+            $stored = Storage::disk('public')->put($path, $webpEncoded);
 
             if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image.']);

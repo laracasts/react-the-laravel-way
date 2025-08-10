@@ -10,29 +10,22 @@ import { Filters, PaginatedResponse, Puppy, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useRef } from 'react';
 
-export default function App({ puppies, filters }: { puppies: PaginatedResponse<Puppy>; filters: Filters }) {
+export default function App({ puppies, likedPuppies, filters }: { puppies: PaginatedResponse<Puppy>; likedPuppies: Puppy[]; filters: Filters }) {
+    const { auth } = usePage<SharedData>().props;
+    const mainRef = useRef<HTMLElement>(null);
     return (
         <PageWrapper>
             <Container>
                 <Header />
-                <Main paginatedPuppies={puppies} filters={filters} />
+                <main ref={mainRef} className="scroll-mt-6">
+                    <div className="mt-24 grid gap-8 sm:grid-cols-2">
+                        <Search filters={filters} />
+                        {auth.user && <Shortlist puppies={likedPuppies} />}
+                    </div>
+                    <PuppiesList puppies={puppies} />
+                    {auth.user && <NewPuppyForm mainRef={mainRef} />}
+                </main>
             </Container>
         </PageWrapper>
-    );
-}
-
-function Main({ paginatedPuppies, filters }: { paginatedPuppies: PaginatedResponse<Puppy>; filters: Filters }) {
-    const { auth } = usePage<SharedData>().props;
-    const mainRef = useRef<HTMLElement>(null);
-
-    return (
-        <main ref={mainRef} className="scroll-mt-6">
-            <div className="mt-24 grid gap-8 sm:grid-cols-2">
-                <Search filters={filters} />
-                {auth.user && <Shortlist puppies={paginatedPuppies.data} />}
-            </div>
-            <PuppiesList puppies={paginatedPuppies} />
-            {auth.user && <NewPuppyForm mainRef={mainRef} />}
-        </main>
     );
 }
