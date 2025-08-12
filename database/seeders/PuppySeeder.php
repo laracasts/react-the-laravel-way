@@ -143,7 +143,7 @@ class PuppySeeder extends Seeder
         foreach ($puppies as $puppy) {
 
             // Optimize the image
-            $input = storage_path('app/public/puppies/' . $puppy['image']);
+            $input = base_path('seed-images/' . $puppy['image']);
             $optimized = $optimizer->handle($input);
 
             // Grab the path of the image

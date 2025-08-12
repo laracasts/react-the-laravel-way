@@ -19,7 +19,6 @@ class PuppyController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-
         return Inertia::render('puppies/index', [
             'puppies' => PuppyResource::collection(
                 Puppy::query()
