@@ -12,6 +12,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('puppies.like');
     Route::post('puppies', [PuppyController::class, 'store'])
         ->name('puppies.store');
+    Route::delete('puppies/{puppy}', [PuppyController::class, 'destroy'])
+        ->name('puppies.destroy');
 
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
