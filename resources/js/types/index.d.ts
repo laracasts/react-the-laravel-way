@@ -56,6 +56,7 @@ export interface Puppy {
     likedBy: User['id'][];
     can: {
         delete: boolean;
+        update: boolean;
     };
 }
 

@@ -37,7 +37,7 @@ class PuppyPolicy
      */
     public function update(User $user, Puppy $puppy): bool
     {
-        return false;
+        return $puppy->user_id === $user->id;
     }
 
     /**
@@ -62,5 +62,10 @@ class PuppyPolicy
     public function forceDelete(User $user, Puppy $puppy): bool
     {
         return false;
+    }
+
+    protected function isOwner(User $user, Puppy $puppy): bool
+    {
+        return $puppy->user_id === $user->id;
     }
 }

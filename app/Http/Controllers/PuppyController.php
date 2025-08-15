@@ -123,4 +123,12 @@ class PuppyController extends Controller
             ->route('home', ['page' => 1])
             ->with('success', 'Puppy deleted successfully!');
     }
+
+    // ------------------------------
+    // Update
+    // ------------------------------
+    public function update(Request $request, Puppy $puppy)
+    {
+        dd('Hello from the update method!');
+    }
 }
